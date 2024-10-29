@@ -78,7 +78,7 @@
 <body>
 
 <div class="profil-container">
-    <img src="foto-profil.jpg" alt="Foto Profil" class="profil-foto">
+    <img src="alkimia_pemurni_alkemi_sihir_alkemi_0_9e5df5f2-6e3d-4c32-a606-5837cec790ae_0.jpg" alt="Foto Profil" class="profil-foto">
     <h2 class="profil-nama">Nama Anda</h2>
     <p class="profil-deskripsi">Ini adalah deskripsi singkat tentang Anda. Contoh: Seorang pengembang web dengan hasrat untuk desain dan teknologi.</p>
     
