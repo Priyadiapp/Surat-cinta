@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vituber Sederhana</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #videoPlayer {
+            width: 320px;
+            height: auto;
+            background-color: black;
+            border-radius: 8px;
+        }
+        #controls {
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #555;
+            color: #fff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Vituber Sederhana</h1>
+    <video id="videoPlayer" autoplay loop muted playsinline>
+        <source src="video1.webm" type="video/webm">
+        Browser Anda tidak mendukung video transparan.
+    </video>
+    
+    <div id="controls">
+        <button onclick="togglePictureInPicture()">Aktifkan Mode Floating</button>
+        <button onclick="startVoiceRecognition()">Aktifkan Pengenalan Suara</button>
+    </div>
+
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        // Fungsi untuk mode Picture-in-Picture (PiP)
+        async function togglePictureInPicture() {
+            try {
+                if (document.pictureInPictureElement) {
+                    await document.exitPictureInPicture();
+                } else {
+                    await videoPlayer.requestPictureInPicture();
+                }
+            } catch (error) {
+                console.error("Gagal mengaktifkan mode Picture-in-Picture:", error);
+            }
+        }
+
+        // Fungsi untuk beralih ke video kedua
+        function switchToSecondVideo() {
+            videoPlayer.src = "video2.webm";
+            videoPlayer.loop = false;  // Video kedua tidak diulang
+            videoPlayer.play();
+        }
+
+        // Pengenalan suara untuk peralihan video
+        function startVoiceRecognition() {
+            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                
+                recognition.continuous = true;
+                recognition.lang = 'id-ID';
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[event.results.length - 1][0].transcript.trim();
+                    console.log("Mendengar:", transcript);
+
+                    // Jika mendengar kata "lanjut", beralih ke video kedua
+                    if (transcript.toLowerCase().includes("lanjut")) {
+                        switchToSecondVideo();
+                    }
+                };
+
+                recognition.onerror = (event) => {
+                    console.error("Kesalahan pengenalan suara:", event.error);
+                };
+
+                recognition.onend = () => {
+                    console.log("Pengenalan suara berakhir.");
+                };
+
+                recognition.start();
+                console.log("Pengenalan suara dimulai.");
+            } else {
+                alert("Pendeteksi suara tidak didukung di browser Anda.");
+            }
+        }
+        
+        // Set video pertama untuk terus berulang
+        videoPlayer.onended = () => {
+            videoPlayer.play();  // Ulangi video jika video pertama berakhir
+        };
+    </script>
+
+</body>
+</html>
